@@ -9,33 +9,44 @@ function App() {
     const [password, setPassword] = useState("");
 
     useEffect(() => {
-        let string = "";
-        let numeric = "";
-        let punctuation = "";
+        let string = "QWERTYUIOPASDFGHJKLZXCVBNMqwertyuiopasdfghjklzxcvbnm"; 
+        let numeric = "0123456789";
+        let punctuation = "!@#$%^&*()_+~`|}{[]\:;?><,./-=";
         let genPassword = "";
 
         if(numbers) { string += numeric; }
         if(chars) { string += punctuation};
 
         for(let i = 0; i < length; i++) {
-
+            genPassword += string[Math.floor(Math.random() * string.length)];
         }
+
+        setPassword(genPassword);
 
     }, [length, numbers, chars]);
 
     return (
         <div>
-            <input type="text" placeholder="Password" readOnly />
-            <button type="button">Copy</button>
+            <input type="text" placeholder="Password" value={password} readOnly />
+            <button type="button" onClick={() => {
+                window.navigator.clipboard.writeText(password);
+            }}>Copy</button>
 
             <br></br>
 
-            <input type="range" min={1} max={40} value={8} />
+            <input type="range" min={1} max={40} value={length} onChange={(event) => {
+                setLength(event.target.value);
+            }} />
+            <label>Length: {length}</label>
 
-            <input type="checkbox" />
+            <input type="checkbox" onClick={() => {
+                setNumbers(!numbers);
+            }} />
             <label>Numbers</label>
 
-            <input type="checkbox" />
+            <input type="checkbox" onClick={() => {
+                setChars(!chars);
+            }} />
             <label>Characters</label>
         </div>  
     );
